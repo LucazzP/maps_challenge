@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "129779933426",
+    "firebase_url": "https://desafio-maps.firebaseio.com",
+    "project_id": "desafio-maps",
+    "storage_bucket": "desafio-maps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129779933426:android:d219242ff38c9375be306b",
+        "android_client_info": {
+          "package_name": "dev.polazzo.desafio_maps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129779933426-d959kpsp5u3vm3d0ma0i2j2cue3778bv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaDErhEKMwEHpen9oij7dpUzTNzhrBHrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129779933426-d959kpsp5u3vm3d0ma0i2j2cue3778bv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
