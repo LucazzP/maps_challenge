@@ -1,10 +1,33 @@
 import 'package:desafio_maps/app/modules/home/home_module.dart';
+import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
+import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
 import 'package:flutter/material.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
   final SearchBloc bloc = HomeModule.to.get<SearchBloc>();
+  final LayerLink layerLink = LayerLink();
+  final GlobalKey textFieldKey = GlobalKey();
+  OverlayEntry overlayEntry;
+
+  @override
+  void initState() {
+    bloc.expanded.stream.listen((value) {
+      if (value) {
+        updateOverlay();
+        Overlay.of(context).insert(overlayEntry);
+      } else {
+        overlayEntry.remove();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,35 +37,25 @@ class SearchWidget extends StatelessWidget {
         child: Material(
           elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: StreamBuilder<double>(
-              stream: bloc.heightSearchOut,
-              initialData: 50,
-              builder: (context, snapshot) {
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
-                  width: double.maxFinite,
-                  height: snapshot.data,
-                  child: Column(
-                    children: <Widget>[
-                      _search(onAdd: () {}),
-                      Visibility(
-                        visible: snapshot.data != 50,
-                        child:
-                            SugestionsWidget(heightBehavior: bloc.heightSearch),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            width: double.maxFinite,
+            height: 50,
+            child: CompositedTransformTarget(
+              link: layerLink,
+              child: _search(
+                context,
+                onAdd: () {},
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _search({@required Function onAdd}) => Row(
+  Widget _search(BuildContext context, {@required Function onAdd}) => Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -53,8 +66,12 @@ class SearchWidget extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
+              key: textFieldKey,
               onTap: () => bloc.expand(true),
-              onEditingComplete: () => bloc.expand(false),
+              onEditingComplete: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                bloc.expand(false);
+              },
               decoration: InputDecoration(
                 hintText: "Search here",
                 focusedBorder: UnderlineInputBorder(
@@ -79,4 +96,36 @@ class SearchWidget extends StatelessWidget {
           )
         ],
       );
+
+  void updateOverlay() {
+    overlayEntry = OverlayEntry(builder: (context) {
+      final double heightOffset =
+          (textFieldKey.currentContext.findRenderObject() as RenderBox)
+              .size
+              .height -
+              7.5;
+      final double width = MediaQuery.of(context).size.width - 24;
+      return Positioned(
+        width: width,
+        child: CompositedTransformFollower(
+          link: layerLink,
+          showWhenUnlinked: false,
+          offset: Offset(-4, heightOffset),
+          child: new Container(
+            width: width,
+            alignment: Alignment.center,
+            child: new Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+              ),
+              child: SugestionsWidget(),
+            ),
+          ),
+        ),
+      );
+    });
+  }
 }

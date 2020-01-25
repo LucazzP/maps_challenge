@@ -1,6 +1,6 @@
 import 'package:desafio_maps/app/modules/login/login_bloc.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:desafio_maps/app/modules/login/login_page.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class LoginModule extends ChildModule {
   @override

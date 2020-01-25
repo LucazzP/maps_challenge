@@ -1,10 +1,10 @@
 import 'package:desafio_maps/app/app_bloc.dart';
-import 'package:desafio_maps/app/modules/login/login_module.dart';
-import 'package:desafio_maps/app/shared/guards/login_guard.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter/material.dart';
 import 'package:desafio_maps/app/app_widget.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
+import 'package:desafio_maps/app/modules/login/login_module.dart';
+import 'package:desafio_maps/app/shared/guards/login_guard.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends MainModule {
   @override
