@@ -14,8 +14,7 @@ class HomeModule extends ChildModule {
         Bind(
           (i) => HomeRepository(
             Dio(),
-            apiKeyGoogleAndroid: "AIzaSyDx0y4YOpQ4KfYAfTLHt7pmKbNmAklhivk",
-            apiKeyGoogleIos: "AIzaSyCW4K6DLeaS3LdO_18PVPUzTe2LzNxTQDY",
+            apiKeyGoogle: "AIzaSyDxQFpheXdkUN6FfTB1fpobL6PgzqeJMiU",
           ),
         ),
         Bind((i) => MapsBloc()),

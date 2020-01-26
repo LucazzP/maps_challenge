@@ -5,6 +5,7 @@ import 'package:desafio_maps/app/modules/home/home_repository.dart';
 import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
 import 'package:desafio_maps/app/shared/models/response_model.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -40,10 +41,10 @@ class SearchBloc extends Disposable {
 
   void updateResults(String query) {
     if (query.isNotEmpty) {
+//      if (_timer == null || !(_timer?.isActive ?? false)) {
+//        _queryResults(query);
+//      }
       _cancelTimer();
-      if (_timer == null || !(_timer?.isActive ?? false)) {
-        _queryResults(query);
-      }
       _timer = Timer(Duration(milliseconds: 1500), () {
         _queryResults(query);
       });
@@ -59,15 +60,7 @@ class SearchBloc extends Disposable {
       lat: _lastLat.toString(),
       lng: _lastLng.toString()
     );
-    print(response.data);
-    listResults = [
-      PlaceTileModel(
-        photoUrl:
-            "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
-        subtitle: "Lindo jardim",
-        title: "Jardim Botânico",
-      ),
-    ];
+    listResults = List.castFrom<dynamic, Map<String, dynamic>>(response.data['predictions']).map((json) => PlaceTileModel.fromResult(json)).toList();
   }
 
   void _cancelTimer() {

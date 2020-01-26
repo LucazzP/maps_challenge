@@ -41,14 +41,10 @@ class SugestionsWidget extends StatelessWidget {
       ),
       list([
         PlaceTileModel(
-          photoUrl:
-          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
           subtitle: "Lindo jardim",
           title: "Jardim Botânico",
         ),
         PlaceTileModel(
-          photoUrl:
-          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
           subtitle: "Lindo jardim",
           title: "Jardim Botânico",
         ),
@@ -66,8 +62,6 @@ class SugestionsWidget extends StatelessWidget {
       ),
       list([
         PlaceTileModel(
-          photoUrl:
-          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
           subtitle: "Lindo jardim",
           title: "Jardim Botânico",
         ),
