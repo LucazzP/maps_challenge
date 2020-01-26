@@ -1,17 +1,17 @@
-import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/widgets/maps/maps_widget.dart';
-import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_widget.dart';
 import 'package:flutter/material.dart';
 
+import 'home_bloc.dart';
+import 'home_module.dart';
+
 class HomePage extends StatelessWidget {
-  final Function(double lat, double lng) updateLastLocation =
-      HomeModule.to.get<SearchBloc>().updateLastLocation;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: MapsWidget(updateLastLocation),
+      body: MapsWidget(),
+      key: HomeModule.to.get<HomeBloc>().scaffoldKey,
       bottomNavigationBar: _bottomNavigator,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(

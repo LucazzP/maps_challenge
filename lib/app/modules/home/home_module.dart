@@ -1,3 +1,4 @@
+import 'package:desafio_maps/app/modules/home/widgets/place_details/place_details_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_repository.dart';
 import 'package:desafio_maps/app/modules/home/widgets/maps/maps_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
+        Bind((i) => PlaceDetailsBloc()),
         Bind(
           (i) => HomeRepository(
             Dio(),

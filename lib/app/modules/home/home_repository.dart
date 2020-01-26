@@ -26,6 +26,17 @@ class HomeRepository extends Disposable {
     );
   }
 
+  Future<ResponseModel<Map<String, dynamic>>> getPlacesNearby(String lat, String lng, {String pageToken}) =>
+      dioRequests.get<Map<String, dynamic>>(
+        "$baseUrlGoogle/nearbysearch/json?"
+            "location=$lat,$lng"
+            "&type=tourist_attraction"
+            "&key=$apiKeyGoogle"
+            "&radius=5000"
+            "&language=pt-BR"
+            "${pageToken == null ? "" : "&pagetoken=$pageToken"}",
+      );
+
   Future<ResponseModel> getPhoto(String photoReference, {int maxWidth = 400}) =>
       dioRequests.get(
         "$baseUrlGoogle/photo?"
