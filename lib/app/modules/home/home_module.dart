@@ -1,6 +1,6 @@
+import 'package:desafio_maps/app/modules/home/subpages/maps/maps_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_details/place_details_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_repository.dart';
-import 'package:desafio_maps/app/modules/home/widgets/maps/maps_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_page.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_bloc.dart';

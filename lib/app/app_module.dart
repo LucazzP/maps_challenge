@@ -1,3 +1,4 @@
+import 'package:desafio_maps/app/app_repository.dart';
 import 'package:desafio_maps/app/app_bloc.dart';
 import 'package:desafio_maps/app/app_widget.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        Bind((i) => AppRepository()),
         Bind((i) => AppBloc()),
       ];
 

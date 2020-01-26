@@ -1,9 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:desafio_maps/app/modules/home/models/place_details_model.dart';
+import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:flutter/material.dart';
 
 class PlaceDetailsWidget extends StatefulWidget{
-  final PlaceDetailsModel place;
+  final SpotModel place;
 
   const PlaceDetailsWidget({Key key, this.place}) : super(key: key);
 

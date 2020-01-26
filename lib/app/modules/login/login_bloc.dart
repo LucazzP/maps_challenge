@@ -25,7 +25,7 @@ class LoginBloc extends Disposable {
                 FacebookAuthProvider.getCredential(
               accessToken: facebookLoginResult.accessToken.token,
             );
-            await FirebaseAuth.instance.signInWithCredential(credential);
+            AuthResult authResult = await FirebaseAuth.instance.signInWithCredential(credential);
             break;
           }
       }

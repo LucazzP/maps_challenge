@@ -1,13 +1,16 @@
 class PlaceTileModel {
   final String title;
   final String subtitle;
+  final String photo;
   final String placeId;
 
   PlaceTileModel({
     this.title,
     this.subtitle,
+    this.photo,
     this.placeId,
   });
+
 
   factory PlaceTileModel.fromResult(Map<String, dynamic> json) =>
       PlaceTileModel(
