@@ -4,66 +4,76 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SugestionsWidget extends StatelessWidget {
-  const SugestionsWidget({Key key}) : super(key: key);
+  final Stream<List<PlaceTileModel>> streamListResults;
+  final List<PlaceTileModel> initialData;
+
+  const SugestionsWidget({Key key, @required this.streamListResults, this.initialData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Divider(
-          height: 2,
-          thickness: 1,
-          color: Colors.grey[200],
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Recents",
-            style: TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        list([
-          PlaceTileModel(
-            photoUrl:
-            "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
-            subtitle: "Lindo jardim",
-            title: "Jardim Botânico",
-          ),
-          PlaceTileModel(
-            photoUrl:
-            "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
-            subtitle: "Lindo jardim",
-            title: "Jardim Botânico",
-          ),
-        ], showLastDivider: true,),
-        Container(
-          padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Favorites",
-            style: TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        list([
-          PlaceTileModel(
-            photoUrl:
-            "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
-            subtitle: "Lindo jardim",
-            title: "Jardim Botânico",
-          ),
-        ]),
-
-      ],
+    return StreamBuilder<List<PlaceTileModel>>(
+      stream: streamListResults,
+      initialData: initialData,
+      builder: (context, snapshot){
+        return (snapshot.hasData && snapshot.data.isNotEmpty) ? list(snapshot.data) : recentsAndFavs;
+      },
     );
   }
+
+  Widget get recentsAndFavs => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      Divider(
+        height: 2,
+        thickness: 1,
+        color: Colors.grey[200],
+      ),
+      Container(
+        padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Recents",
+          style: TextStyle(
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      list([
+        PlaceTileModel(
+          photoUrl:
+          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
+          subtitle: "Lindo jardim",
+          title: "Jardim Botânico",
+        ),
+        PlaceTileModel(
+          photoUrl:
+          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
+          subtitle: "Lindo jardim",
+          title: "Jardim Botânico",
+        ),
+      ], showLastDivider: true,),
+      Container(
+        padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Favorites",
+          style: TextStyle(
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      list([
+        PlaceTileModel(
+          photoUrl:
+          "https://www.ademilar.com.br/blog/wp-content/uploads/2018/02/conheca-o-jardim-botanico-de-curitiba-ademilar.jpg",
+          subtitle: "Lindo jardim",
+          title: "Jardim Botânico",
+        ),
+      ]),
+    ],
+  );
 
   Widget list(List<PlaceTileModel> list, {bool showLastDivider = false}) => ListView.separated(
     physics: NeverScrollableScrollPhysics(),

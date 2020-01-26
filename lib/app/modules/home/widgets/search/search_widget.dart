@@ -1,6 +1,4 @@
 import 'package:desafio_maps/app/modules/home/home_module.dart';
-import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
-import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +12,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   final SearchBloc bloc = HomeModule.to.get<SearchBloc>();
   final LayerLink layerLink = LayerLink();
   final GlobalKey textFieldKey = GlobalKey();
+  final TextEditingController textFieldController = TextEditingController();
   OverlayEntry overlayEntry;
 
   @override
@@ -26,6 +25,9 @@ class _SearchWidgetState extends State<SearchWidget> {
         overlayEntry.remove();
       }
     });
+    textFieldController.addListener(
+      () => bloc.updateResults(textFieldController.text),
+    );
     super.initState();
   }
 
@@ -67,6 +69,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           Expanded(
             child: TextField(
               key: textFieldKey,
+              controller: textFieldController,
               onTap: () => bloc.expand(true),
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(FocusNode());
@@ -101,8 +104,8 @@ class _SearchWidgetState extends State<SearchWidget> {
     overlayEntry = OverlayEntry(builder: (context) {
       final double heightOffset =
           (textFieldKey.currentContext.findRenderObject() as RenderBox)
-              .size
-              .height -
+                  .size
+                  .height -
               7.5;
       final double width = MediaQuery.of(context).size.width - 24;
       return Positioned(
@@ -121,7 +124,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                   bottomRight: Radius.circular(8),
                 ),
               ),
-              child: SugestionsWidget(),
+              child: SugestionsWidget(
+                streamListResults: bloc.listResultsOut,
+                initialData: bloc.listResults,
+              ),
             ),
           ),
         ),

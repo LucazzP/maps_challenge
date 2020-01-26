@@ -1,36 +1,17 @@
-import 'dart:async';
-
+import 'package:desafio_maps/app/modules/home/home_module.dart';
+import 'package:desafio_maps/app/modules/home/widgets/maps/maps_widget.dart';
+import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class HomePage extends StatefulWidget {
-  final String title;
-
-  const HomePage({Key key, this.title = "Home"}) : super(key: key);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  Completer<GoogleMapController> _controller = Completer();
-
-  final CameraPosition _jardimBotanico = CameraPosition(
-    target: LatLng(-25.4420757, -49.2466702),
-    zoom: 15.4,
-  );
+class HomePage extends StatelessWidget {
+  final Function(double lat, double lng) updateLastLocation =
+      HomeModule.to.get<SearchBloc>().updateLastLocation;
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _jardimBotanico,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
+      body: MapsWidget(updateLastLocation),
       bottomNavigationBar: _bottomNavigator,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
