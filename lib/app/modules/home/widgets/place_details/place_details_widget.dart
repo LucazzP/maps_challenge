@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/comment_tile/comment_tile_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/favorite_buttom/favorite_buttom_widget.dart';
+import 'package:desafio_maps/app/modules/home/widgets/new_comment_dialog/new_comment_dialog_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_details/place_details_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/rating_stars/rating_stars_widget.dart';
 import 'package:desafio_maps/app/shared/models/colors_app.dart';
@@ -63,7 +64,7 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
                 width: double.maxFinite,
                 height: widget.expanded
                     ? MediaQuery.of(context).size.height * .9
-                    : MediaQuery.of(context).size.height * .3,
+                    : MediaQuery.of(context).size.height * .35,
                 margin: EdgeInsets.symmetric(horizontal: 32),
                 child: GestureDetector(
                   onTap: widget.onTap,
@@ -195,7 +196,10 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
                   ),
                 ),
                 InkWell(
-                  onTap: () => print("New comment"),
+                  onTap: () => showDialog(
+                    context: context,
+                    child: NewCommentDialogWidget()
+                  ),
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     height: 40,
@@ -221,7 +225,8 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: CommentTileWidget(
-                    comment: widget.place.comments[position]),
+                  comment: widget.place.comments[position],
+                ),
               );
             },
             separatorBuilder: (context, position) {

@@ -4,5 +4,6 @@ import 'package:flutter/material.dart';
 
 class ColorsApp {
   static const Color blue = Color(0xff10159A);
-  static Color deepBlue = Colors.blue[900];
+  static const Color deepBlue = Color(0xff10159A);
+  static const Color yellow = Color(0xffFFBE00);
 }
