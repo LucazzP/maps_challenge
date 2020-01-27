@@ -6,32 +6,43 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeBloc extends Disposable {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  BehaviorSubject<int> activePage = BehaviorSubject<int>.seeded(1);
-  PageController pageController = PageController(initialPage: 1);
+  PersistentBottomSheetController bottomSheetController;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final BehaviorSubject<int> activePage = BehaviorSubject<int>.seeded(1);
+  final PageController pageController = PageController(initialPage: 1);
   double lastLat;
   double lastLng;
 
-  HomeBloc(){
-    pageController.addListener(() => activePage.sink.add(pageController.page.toInt()));
+  HomeBloc() {
+    pageController
+        .addListener(() => activePage.sink.add(pageController.page.toInt()));
   }
 
-  void updateLastLocation(double lat, double lng){
+  Future<void> changePage(int page) async {
+    if(bottomSheetController != null){
+      bottomSheetController.close();
+      await Future.delayed(Duration(milliseconds: 200));
+      bottomSheetController = null;
+    }
+
+    pageController.animateToPage(page,
+          curve: Curves.decelerate, duration: Duration(milliseconds: 200),);
+  }
+
+  void updateLastLocation(double lat, double lng) {
     lastLat = lat;
     lastLng = lng;
   }
 
   void openDetailsPlace(SpotModel spot) {
     print("Click on " + spot.documentReference.documentID);
-    scaffoldKey.currentState.showBottomSheet(
-      (context){
-        return PlaceDetailsWidget();
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8)
-      ),
-      backgroundColor: Colors.transparent
-    );
+    bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
+      return PlaceDetailsWidget(
+        place: spot,
+      );
+    },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        backgroundColor: Colors.transparent);
   }
 
   //dispose will be called automatically by closing its streams

@@ -35,7 +35,7 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() => {
-    "registredSpots": registredSpots == null ? [] : registredSpots.map((spot) => spot.documentReference),
-    "favorites": favorites == null ? [] : favorites.map((spot) => spot.documentReference),
+    "registredSpots": registredSpots == null ? [] : registredSpots.map((spot) => spot.documentReference).toList(),
+    "favorites": favorites == null ? [] : favorites.map((spot) => spot.documentReference).toList(),
   };
 }

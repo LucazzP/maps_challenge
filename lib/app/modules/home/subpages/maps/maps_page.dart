@@ -13,8 +13,7 @@ class MapsPage extends StatefulWidget {
 }
 
 class _MapsPageState extends State<MapsPage> {
-  final Function(double lat, double lng) updateLastLocation =
-      HomeModule.to.get<HomeBloc>().updateLastLocation;
+  final HomeBloc homeBloc = HomeModule.to.get<HomeBloc>();
   final MapsBloc bloc = HomeModule.to.get<MapsBloc>();
 
   final CameraPosition _jardimBotanico = CameraPosition(
@@ -24,7 +23,7 @@ class _MapsPageState extends State<MapsPage> {
 
   @override
   void initState() {
-    updateLastLocation(_jardimBotanico.target.latitude, _jardimBotanico.target.longitude);
+    homeBloc.updateLastLocation(_jardimBotanico.target.latitude, _jardimBotanico.target.longitude);
     bloc.getNearbyPlaces(_jardimBotanico.target.latitude, _jardimBotanico.target.longitude);
     super.initState();
   }

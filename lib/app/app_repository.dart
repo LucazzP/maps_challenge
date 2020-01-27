@@ -4,11 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppRepository extends Disposable {
-  Future<UserModel> getLoggedUser() async{
+  Future<Stream<UserModel>> getLoggedUser() async{
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    final DocumentSnapshot document = await Firestore.instance.collection("users").document(user.uid).get();
-    final UserModel userModel = await UserModel.fromDocument(document);
-    return userModel;
+    final Stream<DocumentSnapshot> document = await Firestore.instance.collection("users").document(user.uid).snapshots();
+    return document.asyncMap((doc) => UserModel.fromDocument(doc));
   }
 
   //dispose will be called automatically

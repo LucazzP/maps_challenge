@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:desafio_maps/app/app_module.dart';
 import 'package:desafio_maps/app/app_repository.dart';
 import 'package:desafio_maps/app/shared/models/user_model.dart';
@@ -7,6 +9,7 @@ import 'package:rxdart/rxdart.dart';
 
 class AppBloc extends Disposable {
   AppRepository _repo = AppModule.to.get<AppRepository>();
+  StreamSubscription listener;
 
   AppBloc(){
     FirebaseAuth.instance.onAuthStateChanged.listen((event) {
@@ -18,8 +21,9 @@ class AppBloc extends Disposable {
     });
     isLogged.stream.listen((logged) async {
       if(logged){
-        _loggedUser.sink.add(await _repo.getLoggedUser());
+        listener = (await _repo.getLoggedUser()).listen(_loggedUser.sink.add);
       } else {
+        if(listener != null) listener.cancel();
         _loggedUser.sink.add(null);
       }
     });

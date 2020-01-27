@@ -1,3 +1,4 @@
+import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
@@ -22,13 +23,21 @@ class _SearchWidgetState extends State<SearchWidget> {
         updateOverlay();
         Overlay.of(context).insert(overlayEntry);
       } else {
-        overlayEntry.remove();
+        try {
+          overlayEntry.remove();
+        } catch (e) {}
       }
     });
     textFieldController.addListener(
       () => bloc.updateResults(textFieldController.text),
     );
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    bloc.expanded.sink.add(false);
+    super.deactivate();
   }
 
   @override

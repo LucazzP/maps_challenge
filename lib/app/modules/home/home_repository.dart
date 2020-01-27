@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/shared/models/response_model.dart';
+import 'package:desafio_maps/app/shared/models/user_model.dart';
 import 'package:desafio_maps/app/shared/repositories/dio_requests.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:dio/dio.dart';
@@ -85,9 +86,21 @@ class HomeRepository extends Disposable {
           .documents);
     }
 
-    results = results.where((result) => bounds.contains(Maps.LatLng(result.data['lat'], result.data['lng']))).toList();
+    results = results
+        .where((result) => bounds
+            .contains(Maps.LatLng(result.data['lat'], result.data['lng'])))
+        .toList();
 
     return results.map((doc) => SpotModel.fromDocument(doc)).toList();
+  }
+
+  Future favoritePlace(DocumentReference place, UserModel user) {
+    List<DocumentReference> favorites =
+        user.favorites.map((fav) => fav.documentReference).toList();
+    favorites.add(place);
+    return user.documentReference.updateData({
+      "favorites": favorites,
+    });
   }
 
   Future<ResponseModel<Map<String, dynamic>>> getPlaceAutoComplete(String input,

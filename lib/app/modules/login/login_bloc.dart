@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:desafio_maps/app/shared/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,6 +28,12 @@ class LoginBloc extends Disposable {
               accessToken: facebookLoginResult.accessToken.token,
             );
             AuthResult authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+            DocumentReference userRef  = Firestore.instance.collection("users").document(authResult.user.uid);
+            userRef.get().then((data) {
+              if(!data.exists){
+                userRef.setData(UserModel(documentReference: data.reference, favorites: [], registredSpots: []).toJson());
+              }
+            });
             break;
           }
       }

@@ -51,9 +51,7 @@ class HomePage extends StatelessWidget {
         initialData: 1,
         builder: (BuildContext context, snapshot) {
           return BottomNavigationBar(
-            onTap: (page) => bloc.pageController.animateToPage(page,
-                curve: Curves.decelerate,
-                duration: Duration(milliseconds: 200)),
+            onTap: (page) => bloc.changePage(page),
             currentIndex: snapshot.data,
             items: [
               const BottomNavigationBarItem(

@@ -23,31 +23,18 @@ class FavoritesPage extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     )
-                  : Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            "Registred tourist spots",
-                            style: TextStyle(color: Colors.black),
+                  : ListView.builder(
+                      itemCount: snapshot.data.favorites.length,
+                      itemBuilder: (context, index) {
+                        SpotModel spot = snapshot.data.favorites[index];
+                        return PlaceTileWidget(
+                          placeTile: PlaceTileModel(
+                            title: spot.name,
+                            subtitle: spot.description,
+                            photo: spot.photo,
                           ),
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.favorites.length,
-                          itemBuilder: (context, index) {
-                            SpotModel spot =
-                                snapshot.data.favorites[index];
-                            return PlaceTileWidget(
-                              placeTile: PlaceTileModel(
-                                title: spot.name,
-                                subtitle: spot.description,
-                                photo: spot.photo,
-                              ),
-                            );
-                          },
-                        )
-                      ],
+                        );
+                      },
                     )
               : Center(
                   child: CircularProgressIndicator(),

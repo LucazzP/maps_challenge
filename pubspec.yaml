@@ -6,6 +6,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  google_fonts: ^0.3.3
   rxdart: ^0.23.1
   flutter_modular: ^0.3.4
   cloud_firestore: ^0.13.0+1
