@@ -1,5 +1,7 @@
+import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_details/place_details_widget.dart';
+import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,14 +21,9 @@ class HomeBloc extends Disposable {
   }
 
   Future<void> changePage(int page) async {
-    if(bottomSheetController != null){
-      bottomSheetController.close();
-      await Future.delayed(Duration(milliseconds: 200));
-      bottomSheetController = null;
-    }
-
-    pageController.animateToPage(page,
-          curve: Curves.decelerate, duration: Duration(milliseconds: 200),);
+    closeAll();
+    await Future.delayed(Duration(milliseconds: 200));
+    pageController.jumpToPage(page);
   }
 
   void updateLastLocation(double lat, double lng) {
@@ -35,14 +32,41 @@ class HomeBloc extends Disposable {
   }
 
   void openDetailsPlace(SpotModel spot) {
-    print("Click on " + spot.documentReference.documentID);
-    bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
-      return PlaceDetailsWidget(
-        place: spot,
-      );
-    },
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        backgroundColor: Colors.transparent);
+    bottomSheetController = scaffoldKey.currentState.showBottomSheet(
+      (context) {
+        return PlaceDetailsWidget(
+          place: spot,
+          onTap: () => _openDetailsPlaceModal(spot),
+        );
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  void _openDetailsPlaceModal(SpotModel spot){
+    bottomSheetController.close();
+    showModalBottomSheet(
+      context: scaffoldKey.currentState.context,
+      builder: (context) {
+        return PlaceDetailsWidget(
+          place: spot,
+          expanded: true,
+        );
+      },
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  void closeAll() {
+    try {
+      if (bottomSheetController != null) {
+        bottomSheetController.close();
+        bottomSheetController = null;
+      }
+    } catch (e) {}
   }
 
   //dispose will be called automatically by closing its streams

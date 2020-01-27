@@ -97,7 +97,11 @@ class HomeRepository extends Disposable {
   Future favoritePlace(DocumentReference place, UserModel user) {
     List<DocumentReference> favorites =
         user.favorites.map((fav) => fav.documentReference).toList();
-    favorites.add(place);
+    if(favorites.contains(place)){
+      favorites.remove(place);
+    } else {
+      favorites.add(place);
+    }  
     return user.documentReference.updateData({
       "favorites": favorites,
     });

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
+import 'package:equatable/equatable.dart';
 
-class SpotModel {
+class SpotModel implements Equatable {
   final String name;
   final String description;
   final double rating;
@@ -27,26 +28,31 @@ class SpotModel {
     this.photo,
     this.documentReference,
   });
-  
-  factory SpotModel.fromDocument(DocumentSnapshot doc){
+
+  factory SpotModel.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> json = doc.data;
     json['documentRef'] = doc.reference;
     return SpotModel.fromJson(json);
   }
 
   factory SpotModel.fromJson(Map<String, dynamic> json) => SpotModel(
-    documentReference: json.containsKey("documentRef") ? json['documentRef'] : null,
-    name: json['name'],
-    description: json['description'],
-    rating: double.tryParse(json['rating'].toString()),
-    category: json['category'],
-    about: json['about'],
-    comments: json['comments'] == null ? null : List.from(json['comments']).map((comment) => CommentModel.fromJson(comment)).toList(),
-    lat: json['lat'],
-    lng: json['lng'],
-    photo: json['photo'],
-    iconColor: double.tryParse(json['iconColor'].toString()),
-  );
+        documentReference:
+            json.containsKey("documentRef") ? json['documentRef'] : null,
+        name: json['name'],
+        description: json['description'],
+        rating: double.tryParse(json['rating'].toString()),
+        category: json['category'],
+        about: json['about'],
+        comments: json['comments'] == null
+            ? null
+            : List.from(json['comments'])
+                .map((comment) => CommentModel.fromJson(comment))
+                .toList(),
+        lat: json['lat'],
+        lng: json['lng'],
+        photo: json['photo'],
+        iconColor: double.tryParse(json['iconColor'].toString()),
+      );
 
   static Future<SpotModel> fromReference(DocumentReference reference) async {
     final res = await reference.get();
@@ -54,15 +60,32 @@ class SpotModel {
   }
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "description": description,
-    "rating": rating,
-    "category": category,
-    "about": about,
-    "comments": comments == null ? null : comments.map((comment) => comment.toJson()),
-    "lat": lat,
-    "lng": lng,
-    "photo": photo,
-    "iconColor": iconColor,
-  };
+        "name": name,
+        "description": description,
+        "rating": rating,
+        "category": category,
+        "about": about,
+        "comments": comments == null
+            ? null
+            : comments.map((comment) => comment.toJson()),
+        "lat": lat,
+        "lng": lng,
+        "photo": photo,
+        "iconColor": iconColor,
+      };
+
+  @override
+  List<Object> get props => [
+        name,
+        description,
+        rating,
+        category,
+        about,
+        comments,
+        lat,
+        lng,
+        photo,
+        iconColor,
+        documentReference
+      ];
 }

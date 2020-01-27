@@ -30,7 +30,10 @@ class SearchBloc extends Disposable {
   String _sessionId = Uuid().v4();
 
   void expand(bool expand) {
-    if (expand != expanded.value) expanded.sink.add(expand);
+    if (expand != expanded.value) {
+      if(expand) homeBloc.closeAll();
+      expanded.sink.add(expand);
+    }
   }
 
   void updateResults(String query) {

@@ -10,7 +10,7 @@ class FavoriteButtomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(initialState != false) bloc.favorited.sink.add(initialState);
+    if(initialState != false && bloc.favorited.value != initialState) bloc.favorited.sink.add(initialState);
 
     return InkWell(
       onTap: () {

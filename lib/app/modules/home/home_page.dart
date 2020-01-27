@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
             initialData: 1,
             builder: (context, snapshot) {
               return snapshot?.data == 1 ? SearchWidget() : AppBar(
-                title: Text(snapshot.data == 0 ? "Favorites" : "Profile", style: TextStyle(fontWeight: FontWeight.w900),),
+                title: Text(snapshot.data == 0 ? "Favorites" : "Profile"),
                 centerTitle: true,
                 actions: <Widget>[
                   if(snapshot.data == 2) IconButton(

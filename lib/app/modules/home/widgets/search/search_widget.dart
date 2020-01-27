@@ -1,4 +1,3 @@
-import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
@@ -36,7 +35,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   void deactivate() {
-    bloc.expanded.sink.add(false);
+    bloc.expand(false);
     super.deactivate();
   }
 

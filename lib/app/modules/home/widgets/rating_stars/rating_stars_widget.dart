@@ -1,4 +1,5 @@
 import 'package:desafio_maps/app/modules/home/widgets/rating_stars/rating_stars_bloc.dart';
+import 'package:desafio_maps/app/shared/models/colors_app.dart';
 import 'package:flutter/material.dart';
 
 class RatingStarsWidget extends StatelessWidget {
@@ -27,6 +28,6 @@ class RatingStarsWidget extends StatelessWidget {
   }
   
   Widget _star(double rating){
-    return Icon(rating >= 1 ? Icons.star : rating > 0 ? Icons.star_half : Icons.star_border, color: Colors.blue[900],);
+    return Icon(rating >= 1 ? Icons.star : rating > 0 ? Icons.star_half : Icons.star_border, color: ColorsApp.deepBlue,);
   }
 }

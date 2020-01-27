@@ -40,6 +40,7 @@ class _MapsPageState extends State<MapsPage> {
           onCameraMove: (CameraPosition position){
             bloc.getNearbyPlaces(position.target.latitude, position.target.longitude);
           },
+          onTap: (a) => homeBloc.closeAll(),
         );
       }
     );
