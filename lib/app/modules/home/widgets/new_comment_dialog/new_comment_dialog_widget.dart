@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/widgets/new_comment_dialog/new_comment_dialog_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/rating_stars/rating_stars_widget.dart';
 import 'package:desafio_maps/app/shared/models/colors_app.dart';
-import 'package:desafio_maps/app/shared/widgets/error_advise/error_advise.dart';
+import 'package:desafio_maps/app/shared/widgets/alert_dialog/alert_dialog.dart';
+import 'package:desafio_maps/app/shared/widgets/button_expanded/button_expanded_widget.dart';
 import 'package:flutter/material.dart';
 
 class NewCommentDialogWidget extends StatefulWidget {
@@ -27,9 +28,9 @@ class _NewCommentDialogWidgetState extends State<NewCommentDialogWidget> {
     WidgetsBinding.instance.addPostFrameCallback((a) {
       _streamSubscription = widget.bloc.error.stream.listen((data) => {});
       _streamSubscription.onError(
-        (error) => ErrorAdvise.showAlertDialog(
+        (error) => AlertDialogCustom.error(
           context,
-          error.toString(),
+          error: error.toString(),
         ),
       );
     });
@@ -85,40 +86,18 @@ class _NewCommentDialogWidgetState extends State<NewCommentDialogWidget> {
                 cursorColor: ColorsApp.deepBlue,
                 onChanged: (value) => widget.bloc.commentary = value,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    labelText: "Comment",
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    labelStyle: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.bold,
-                    )),
+                  border: OutlineInputBorder(),
+                  labelText: "Comment",
+                ),
                 maxLines: 4,
               ),
-              RaisedButton(
-                color: ColorsApp.yellow,
-                textColor: ColorsApp.deepBlue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                onPressed: () async {
-                  if(await widget.bloc.comment()){
+              ButtonExpandedWidget(
+                text: "Comment",
+                onTap: () async {
+                  if (await widget.bloc.comment()) {
                     Navigator.of(context).pop();
                   }
                 },
-                padding: const EdgeInsets.all(12),
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Comment",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
               )
             ],
           ),

@@ -166,7 +166,7 @@ class HomeRepository extends Disposable {
         "$baseUrlGoogle/details/json?"
         "place_id=$placeId"
         "&sessiontoken=$sessionId"
-        "&fields=name,rating,photo"
+        "&fields=vicinity"
         "&key=$apiKeyGoogle"
         "&language=pt-BR",
       );

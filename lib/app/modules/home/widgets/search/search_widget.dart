@@ -1,4 +1,5 @@
 import 'package:desafio_maps/app/modules/home/home_module.dart';
+import 'package:desafio_maps/app/modules/home/widgets/new_spot_bottom_sheet/new_spot_bottom_sheet_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,17 @@ class _SearchWidgetState extends State<SearchWidget> {
               link: layerLink,
               child: _search(
                 context,
-                onAdd: () {},
+                onAdd: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => NewSpotBottomSheetWidget(),
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    backgroundColor: Colors.transparent,
+                  );
+                },
               ),
             ),
           ),

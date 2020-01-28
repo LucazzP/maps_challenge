@@ -1,7 +1,6 @@
 import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 class SugestionsWidget extends StatelessWidget {
   final Stream<List<PlaceTileModel>> streamListResults;

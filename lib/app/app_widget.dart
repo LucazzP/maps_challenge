@@ -6,6 +6,7 @@ import 'package:desafio_maps/app/shared/models/colors_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_places_picker/google_places_picker.dart';
 
 class AppWidget extends StatefulWidget {
   @override
@@ -27,6 +28,10 @@ class _AppWidgetState extends State<AppWidget> {
       }
       lastIsLogged = isLogged;
     });
+    PluginGooglePlacePicker.initialize(
+      androidApiKey: "AIzaSyDx0y4YOpQ4KfYAfTLHt7pmKbNmAklhivk",
+      iosApiKey: "AIzaSyCW4K6DLeaS3LdO_18PVPUzTe2LzNxTQDY",
+    );
     super.initState();
   }
 

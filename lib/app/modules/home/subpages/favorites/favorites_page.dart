@@ -3,17 +3,16 @@ import 'package:desafio_maps/app/app_module.dart';
 import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
+import 'package:desafio_maps/app/shared/auth/auth_provider.dart';
 import 'package:desafio_maps/app/shared/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesPage extends StatelessWidget {
-  final AppBloc bloc = AppModule.to.get<AppBloc>();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder<UserModel>(
-        stream: bloc.loggedUserOut,
+        stream: AuthProvider.streamCurrentUser,
         builder: (BuildContext context, snapshot) {
           return snapshot.hasData
               ? snapshot.data.favorites.isEmpty

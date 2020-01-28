@@ -1,7 +1,5 @@
-import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
-import 'package:desafio_maps/app/modules/home/widgets/place_details/place_details_widget.dart';
-import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
+import 'package:desafio_maps/app/modules/home/widgets/place_details_bottom_sheet/place_details_bottom_sheet_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -34,7 +32,7 @@ class HomeBloc extends Disposable {
   void openDetailsPlace(SpotModel spot) {
     bottomSheetController = scaffoldKey.currentState.showBottomSheet(
       (context) {
-        return PlaceDetailsWidget(
+        return PlaceDetailsBottomSheetWidget(
           place: spot,
           onTap: () => _openDetailsPlaceModal(spot),
         );
@@ -49,7 +47,7 @@ class HomeBloc extends Disposable {
     showModalBottomSheet(
       context: scaffoldKey.currentState.context,
       builder: (context) {
-        return PlaceDetailsWidget(
+        return PlaceDetailsBottomSheetWidget(
           place: spot,
           expanded: true,
         );
