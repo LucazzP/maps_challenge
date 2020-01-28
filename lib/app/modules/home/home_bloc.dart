@@ -44,7 +44,7 @@ class HomeBloc extends Disposable {
     );
   }
 
-  void _openDetailsPlaceModal(SpotModel spot){
+  void _openDetailsPlaceModal(SpotModel spot) {
     bottomSheetController.close();
     showModalBottomSheet(
       context: scaffoldKey.currentState.context,

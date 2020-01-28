@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/shared/models/response_model.dart';
 import 'package:desafio_maps/app/shared/models/user_model.dart';
@@ -105,6 +106,25 @@ class HomeRepository extends Disposable {
     return user.documentReference.updateData({
       "favorites": favorites,
     });
+  }
+
+  Future postNewComment(CommentModel comment, DocumentReference place){
+    return Firestore.instance.runTransaction((transaction) async {
+      final snap = await transaction.get(place);
+      Map<String, dynamic> freshPlace = snap.data;
+      List<Map> comments = List.from(freshPlace['comments']);
+      comments.add(comment.toJson());
+      freshPlace['comments'] = comments;
+
+      double newRating = comments.map<int>((c) => c['rating']).reduce((a, b) => a + b) / comments.length;
+      freshPlace['rating'] = newRating;
+
+      transaction.update(place, freshPlace);
+    });
+  }
+
+  Stream<SpotModel> streamPlace(DocumentReference place){
+    return place.snapshots().map((doc) => SpotModel.fromDocument(doc));
   }
 
   Future<ResponseModel<Map<String, dynamic>>> getPlaceAutoComplete(String input,

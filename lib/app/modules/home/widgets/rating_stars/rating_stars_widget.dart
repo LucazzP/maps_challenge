@@ -4,21 +4,22 @@ import 'package:flutter/material.dart';
 
 class RatingStarsWidget extends StatelessWidget {
   final RatingStarsBloc bloc = RatingStarsBloc();
-  final double initialRating;
+  final double rating;
   final Function(int) onTap;
 
-  RatingStarsWidget({Key key, this.initialRating})
+  RatingStarsWidget({Key key, this.rating})
       : onTap = null,
         super(key: key);
   RatingStarsWidget.selectable({Key key, this.onTap})
-      : initialRating = 0,
+      : rating = 0,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bloc.changeRating(rating);
     return StreamBuilder<double>(
         stream: bloc.rating.stream,
-        initialData: initialRating ?? 0,
+        initialData: rating ?? 0,
         builder: (context, snapshot) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -45,7 +46,7 @@ class RatingStarsWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (rating == 1)
+        if (rating == 1 && onTap != null)
           Text(
             text,
             style: TextStyle(
@@ -59,7 +60,7 @@ class RatingStarsWidget extends StatelessWidget {
               ? null
               : () {
                   onTap(position);
-                  bloc.rating.sink.add(position.toDouble());
+                  bloc.changeRating(position.toDouble());
                 },
           icon: Icon(
             icon,

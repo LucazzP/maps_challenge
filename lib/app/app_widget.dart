@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:desafio_maps/app/app_bloc.dart';
 import 'package:desafio_maps/app/app_module.dart';
+import 'package:desafio_maps/app/shared/models/colors_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,7 +36,7 @@ class _AppWidgetState extends State<AppWidget> {
       navigatorKey: Modular.navigatorKey,
       title: 'Maps Challenge',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: ColorsApp.deepBlue,
         textTheme: GoogleFonts.montserratTextTheme()
       ),
       initialRoute: '/',

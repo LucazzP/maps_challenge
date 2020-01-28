@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/comment_tile/comment_tile_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/favorite_buttom/favorite_buttom_widget.dart';
@@ -23,7 +24,13 @@ class PlaceDetailsWidget extends StatefulWidget {
 
 class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
     with TickerProviderStateMixin {
-  final PlaceDetailsBloc bloc = PlaceDetailsBloc();
+  PlaceDetailsBloc bloc;
+
+  @override
+  void initState() {
+    bloc = PlaceDetailsBloc(widget.place);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,31 +77,40 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
                   onTap: widget.onTap,
                   child: Card(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8),
-                            ),
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  widget.place.photo),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          width: double.maxFinite,
-                          height: MediaQuery.of(context).size.height * .15,
+                        StreamBuilder<String>(
+                          stream: bloc.photo.stream,
+                          initialData: widget.place.photo,
+                          builder: (context, snapshot) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                ),
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      snapshot.data),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              width: double.maxFinite,
+                              height: MediaQuery.of(context).size.height * .15,
+                            );
+                          }
                         ),
-                        SingleChildScrollView(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              _header,
-                              if (widget.expanded) _body
-                            ],
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                _header,
+                                if (widget.expanded) _body
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -134,8 +150,14 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
               SizedBox(
                 height: 10,
               ),
-              RatingStarsWidget(
-                initialRating: widget.place.rating,
+              StreamBuilder<double>(
+                stream: bloc.rating.stream,
+                initialData: widget.place.rating,
+                builder: (context, snapshot) {
+                  return RatingStarsWidget(
+                    rating: snapshot.data,
+                  );
+                }
               )
             ],
           ),
@@ -198,7 +220,7 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
                 InkWell(
                   onTap: () => showDialog(
                     context: context,
-                    child: NewCommentDialogWidget()
+                    child: NewCommentDialogWidget(widget.place.documentReference),
                   ),
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
@@ -218,25 +240,31 @@ class _PlaceDetailsWidgetState extends State<PlaceDetailsWidget>
               ],
             ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            itemCount: widget.place.comments.length,
-            itemBuilder: (context, position) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: CommentTileWidget(
-                  comment: widget.place.comments[position],
-                ),
+          StreamBuilder<List<CommentModel>>(
+            stream: bloc.comments.stream,
+            initialData: widget.place.comments,
+            builder: (context, snapshot) {
+              return ListView.separated(
+                shrinkWrap: true,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, position) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                    child: CommentTileWidget(
+                      comment: snapshot.data[position],
+                    ),
+                  );
+                },
+                separatorBuilder: (context, position) {
+                  return Divider(
+                    height: 2,
+                    thickness: 2,
+                    color: Colors.grey[100],
+                  );
+                },
               );
-            },
-            separatorBuilder: (context, position) {
-              return Divider(
-                height: 2,
-                thickness: 2,
-                color: Colors.grey[100],
-              );
-            },
-          )
+            }
+          ),
         ],
       );
 }
