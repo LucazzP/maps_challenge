@@ -85,6 +85,7 @@ class _NewCommentDialogWidgetState extends State<NewCommentDialogWidget> {
                     : null,
                 cursorColor: ColorsApp.deepBlue,
                 onChanged: (value) => widget.bloc.commentary = value,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Comment",

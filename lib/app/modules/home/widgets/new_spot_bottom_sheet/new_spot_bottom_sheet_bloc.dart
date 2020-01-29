@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/home_repository.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
+import 'package:desafio_maps/app/shared/auth/auth_provider.dart';
 import 'package:desafio_maps/app/shared/widgets/alert_dialog/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -52,6 +53,7 @@ class NewSpotBottomSheetBloc extends Disposable {
             about: about,
             description: description,
           ),
+          AuthProvider.getCurrentUserModel
         );
         return true;
       } catch (e) {}
@@ -67,6 +69,7 @@ class NewSpotBottomSheetBloc extends Disposable {
 
   bool get _validate {
     if (formKey.currentState.validate()) {
+      formKey.currentState.save();
       if (photo.hasValue) {
         if (name != null && name.isNotEmpty) {
           if (category != null && category.isNotEmpty) {

@@ -8,7 +8,7 @@ main() {
   testWidgets('BottomSheetCustomWidget has message',
       (WidgetTester tester) async {
     await tester.pumpWidget(buildTestableWidget(BottomSheetCustomWidget()));
-    final textFinder = find.text('BottomSheetCustom');
+    final textFinder = find.byWidgetPredicate((widget) => widget is Card);
     expect(textFinder, findsOneWidget);
   });
 }

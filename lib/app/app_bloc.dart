@@ -11,19 +11,21 @@ class AppBloc extends Disposable {
   AppRepository _repo = AppModule.to.get<AppRepository>();
   StreamSubscription listener;
 
-  AppBloc(){
-    FirebaseAuth.instance.onAuthStateChanged.listen((event) {
-      if (event != null) {
-        isLogged.sink.add(true);
-      } else if(isLogged.value == true) {
-        isLogged.sink.add(false);
-      }
-    });
+  AppBloc(bool isTest) {
+    if (!isTest) {
+      FirebaseAuth.instance.onAuthStateChanged.listen((event) {
+        if (event != null) {
+          isLogged.sink.add(true);
+        } else if (isLogged.value == true) {
+          isLogged.sink.add(false);
+        }
+      });
+    }
     isLogged.stream.listen((logged) async {
-      if(logged){
+      if (logged) {
         listener = (await _repo.getLoggedUser()).listen(_loggedUser.sink.add);
       } else {
-        if(listener != null) listener.cancel();
+        if (listener != null) listener.cancel();
         _loggedUser.sink.add(null);
       }
     });

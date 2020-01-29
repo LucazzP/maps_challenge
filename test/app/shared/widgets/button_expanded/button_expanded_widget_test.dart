@@ -6,8 +6,8 @@ import 'package:desafio_maps/app/shared/widgets/button_expanded/button_expanded_
 
 main() {
   testWidgets('ButtonExpandedWidget has message', (WidgetTester tester) async {
-    await tester.pumpWidget(buildTestableWidget(ButtonExpandedWidget()));
-    final textFinder = find.text('ButtonExpanded');
+    await tester.pumpWidget(buildTestableWidget(ButtonExpandedWidget(text: "Click",)));
+    final textFinder = find.text('Click');
     expect(textFinder, findsOneWidget);
   });
 }

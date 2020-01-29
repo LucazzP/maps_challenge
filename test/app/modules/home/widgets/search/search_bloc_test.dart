@@ -6,7 +6,7 @@ import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 
 void main() {
-  Modular.init(AppModule());
+  Modular.init(AppModule(true));
   Modular.bindModule(HomeModule());
   SearchBloc bloc;
   

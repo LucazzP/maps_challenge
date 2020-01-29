@@ -6,7 +6,7 @@ import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_bloc
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 
 void main() {
-  Modular.init(AppModule());
+  Modular.init(AppModule(true));
   Modular.bindModule(HomeModule());
   PlaceTileBloc bloc;
   

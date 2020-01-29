@@ -55,20 +55,30 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
                         controller: controllerCategory,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: "Category"
+                          labelText: "Category",
                         ),
+                        textCapitalization: TextCapitalization.sentences,
                         onChanged: (value) => bloc.category = value,
                       ),
-                      noItemsFoundBuilder: (context) => ListTile(title: Text("The category will be created!", style: TextStyle(color: Colors.green),),),
-                      onSuggestionSelected: (sugestion) => controllerCategory.text = sugestion,
-                      itemBuilder: (context, sugestion){
+                      onSaved: (value) => bloc.category = value,
+                      noItemsFoundBuilder: (context) => ListTile(
+                        title: Text(
+                          "The category will be created!",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                      onSuggestionSelected: (sugestion) =>
+                          controllerCategory.text = sugestion,
+                      itemBuilder: (context, sugestion) {
                         return ListTile(
                           title: Text(sugestion),
                         );
                       },
                       getImmediateSuggestions: true,
                       suggestionsCallback: bloc.sugestions,
-                      validator: (value) => value != null && value.length > 3 ? null : "Cannot be empty",
+                      validator: (value) => value != null && value.length > 3
+                          ? null
+                          : "Cannot be empty",
                     ),
                     _inputText(
                       "Description",
@@ -134,7 +144,8 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
                       text: "Add Spot",
                       onTap: () async {
                         if (await bloc.addSpot(context)) {
-                          Navigator.of(context).popUntil((test) => test.isFirst);
+                          Navigator.of(context)
+                              .popUntil((test) => test.isFirst);
                         }
                       },
                     ),
@@ -164,6 +175,7 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
       child: TextFormField(
         onTap: onTap,
         controller: controller,
+        textCapitalization: TextCapitalization.sentences,
         readOnly: readOnly,
         onChanged: onChanged,
         validator: (value) => value.isEmpty ? "Cannot be empty" : null,

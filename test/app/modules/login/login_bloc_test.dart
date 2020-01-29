@@ -6,7 +6,7 @@ import 'package:desafio_maps/app/modules/login/login_bloc.dart';
 import 'package:desafio_maps/app/modules/login/login_module.dart';
 
 void main() {
-  Modular.init(AppModule());
+  Modular.init(AppModule(true));
   Modular.bindModule(LoginModule());
   LoginBloc bloc;
 

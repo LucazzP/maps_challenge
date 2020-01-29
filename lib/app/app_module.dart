@@ -8,10 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends MainModule {
+  final bool isTest;
+
+  AppModule([this.isTest = false]);
+
   @override
   List<Bind> get binds => [
         Bind((i) => AppRepository()),
-        Bind((i) => AppBloc()),
+        Bind((i) => AppBloc(isTest)),
       ];
 
   @override

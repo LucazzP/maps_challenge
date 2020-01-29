@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as Math;
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
@@ -11,7 +10,6 @@ import 'package:desafio_maps/app/shared/models/user_model.dart';
 import 'package:desafio_maps/app/shared/repositories/dio_requests.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as Maps;
 import 'package:maps_toolkit/maps_toolkit.dart';
@@ -135,17 +133,27 @@ class HomeRepository extends Disposable {
     return place.snapshots().map((doc) => SpotModel.fromDocument(doc));
   }
 
-  Future postNewSpot(SpotModel spot) {
-    return Firestore.instance.collection("spots").add(spot.toJson());
+  Future postNewSpot(SpotModel spot, UserModel user) async {
+    DocumentReference reference = await Firestore.instance.collection("spots").add(spot.toJson());
+    List<DocumentReference> registredSpots =
+        user.registredSpots.map((spot) => spot.documentReference).toList();
+    if (registredSpots.contains(reference)) {
+      registredSpots.remove(reference);
+    } else {
+      registredSpots.add(reference);
+    }
+    return user.documentReference.updateData({
+      "registredSpots": registredSpots,
+    });
   }
 
   Future<String> uploadPhoto(File file, {Sink<double> sinkProgress}) async {
     final StorageReference storageRef = FirebaseStorage.instance
         .ref()
         .child('photos/${DateTime.now().microsecondsSinceEpoch}');
-    final File compressedImage = await FlutterImageCompress.compressAndGetFile(file.absolute.path, file.absolute.path + '_compressed.jpg', quality: 80);
+    // final File compressedImage = await FlutterImageCompress.compressAndGetFile(file.absolute.path, file.absolute.path + '_compressed.jpg', quality: 80);
     final StorageUploadTask uploadTask = storageRef.putFile(
-      compressedImage,
+      file,
       StorageMetadata(contentType: 'image'),
     );
 

@@ -98,6 +98,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 FocusScope.of(context).requestFocus(FocusNode());
                 bloc.expand(false);
               },
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: "Search here",
                 focusedBorder: UnderlineInputBorder(

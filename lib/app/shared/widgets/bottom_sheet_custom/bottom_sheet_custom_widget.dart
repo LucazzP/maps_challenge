@@ -65,10 +65,11 @@ class _BottomSheetCustomWidgetState extends State<BottomSheetCustomWidget>
                 child: GestureDetector(
                   onTap: widget.onTap,
                   child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: borderRadius,
-                      ),
-                      child: widget.child),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: borderRadius,
+                    ),
+                    child: widget.child,
+                  ),
                 ),
               ),
             ],
