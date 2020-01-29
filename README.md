@@ -1,16 +1,13 @@
-# desafio_maps
+# Maps Challenge
 
-A new Flutter project.
+A project that simulate a real situation and recreate the google maps with my own features.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project had made with all with the Framework [Flutter](https://flutter.dev)
 
-A few resources to get you started if this is your first Flutter project:
+To run the app on your device is only by downloading the apk-release.apk that is on the root of the project.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [Apk Release](./app-release.apk)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you want to run the project and colaborate, only clone this repo and run with the [Flutter](https://flutter.dev) framework.
