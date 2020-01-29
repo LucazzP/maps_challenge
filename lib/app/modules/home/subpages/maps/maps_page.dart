@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/subpages/maps/maps_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapsPage extends StatefulWidget {
@@ -34,7 +34,8 @@ class _MapsPageState extends State<MapsPage> {
       stream: bloc.markers.stream,
       builder: (context, markers) {
         return GoogleMap(
-          mapType: MapType.normal,
+          myLocationButtonEnabled: false,
+          onMapCreated: (controller) => homeBloc.mapController = controller,
           initialCameraPosition: _jardimBotanico,
           markers: markers.hasData ? markers.data : <Marker>[].toSet(),
           onCameraMove: (CameraPosition position){

@@ -63,5 +63,11 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We needs to use your gallery.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We needs to use your camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We needs to use your microfone.</string>
 </dict>
 </plist>

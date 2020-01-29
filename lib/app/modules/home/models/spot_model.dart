@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
+import 'package:desafio_maps/app/shared/extensions.dart';
 import 'package:equatable/equatable.dart';
 
 class SpotModel implements Equatable {
@@ -60,13 +61,13 @@ class SpotModel implements Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        "name": name,
+        "name": name.capitalise(),
         "description": description,
         "rating": rating,
         "category": category,
         "about": about,
         "comments": comments == null
-            ? null
+            ? []
             : comments.map((comment) => comment.toJson()),
         "lat": lat,
         "lng": lng,

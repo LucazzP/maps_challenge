@@ -8,7 +8,7 @@ import 'package:desafio_maps/app/shared/widgets/alert_dialog/alert_dialog.dart';
 import 'package:desafio_maps/app/shared/widgets/bottom_sheet_custom/bottom_sheet_custom_widget.dart';
 import 'package:desafio_maps/app/shared/widgets/button_expanded/button_expanded_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class NewSpotBottomSheetWidget extends StatefulWidget {
   @override
@@ -20,11 +20,13 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
   final NewSpotBottomSheetBloc bloc = NewSpotBottomSheetBloc();
   final TextEditingController controllerColor = TextEditingController();
   final TextEditingController controllerLocation = TextEditingController();
+  final TextEditingController controllerCategory = TextEditingController();
 
   @override
   void initState() {
     bloc.color.stream.listen((color) => controllerColor.text = color.toHex());
-    bloc.location.stream.listen((location) => controllerLocation.text = location);
+    bloc.location.stream
+        .listen((location) => controllerLocation.text = location);
     super.initState();
   }
 
@@ -46,9 +48,35 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
                   children: <Widget>[
                     _inputText(
                       "Name",
+                      onChanged: (value) => bloc.name = value,
+                    ),
+                    TypeAheadFormField<String>(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: controllerCategory,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Category"
+                        ),
+                        onChanged: (value) => bloc.category = value,
+                      ),
+                      noItemsFoundBuilder: (context) => ListTile(title: Text("The category will be created!", style: TextStyle(color: Colors.green),),),
+                      onSuggestionSelected: (sugestion) => controllerCategory.text = sugestion,
+                      itemBuilder: (context, sugestion){
+                        return ListTile(
+                          title: Text(sugestion),
+                        );
+                      },
+                      getImmediateSuggestions: true,
+                      suggestionsCallback: bloc.sugestions,
+                      validator: (value) => value != null && value.length > 3 ? null : "Cannot be empty",
                     ),
                     _inputText(
-                      "Categories",
+                      "Description",
+                      onChanged: (value) => bloc.description = value,
+                    ),
+                    _inputText(
+                      "About",
+                      onChanged: (value) => bloc.about = value,
                     ),
                     _inputText(
                       "Location",
@@ -87,11 +115,26 @@ class _NewSpotBottomSheetWidgetState extends State<NewSpotBottomSheetWidget> {
                         );
                       },
                     ),
+                    StreamBuilder<String>(
+                      stream: bloc.error.stream,
+                      builder: (BuildContext context, snapshot) {
+                        return snapshot.hasData
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: Text(
+                                  snapshot.data,
+                                  style: TextStyle(color: Colors.redAccent),
+                                ),
+                              )
+                            : Container();
+                      },
+                    ),
                     ButtonExpandedWidget(
                       text: "Add Spot",
                       onTap: () async {
-                        if (await bloc.addSpot) {
-                          Navigator.of(context).pop();
+                        if (await bloc.addSpot(context)) {
+                          Navigator.of(context).popUntil((test) => test.isFirst);
                         }
                       },
                     ),

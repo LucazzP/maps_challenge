@@ -2,16 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-showPopupSelect(
-    {BuildContext context,
-    Function(File model) onPick,}) async {
-  await showDialog(
-      context: context,
-      builder: (context) => TypePopupPickPhotoWidget(
-            onPick: onPick,
-          ));
-}
-
 ///Model using for detect file or color from use on background
 
 class TypePopupPickPhotoWidget extends StatefulWidget {

@@ -1,8 +1,10 @@
+import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/widgets/new_spot_bottom_sheet/new_spot_bottom_sheet_widget.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/sugestions/sugestions_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchWidget extends StatefulWidget {
   @override
@@ -21,7 +23,9 @@ class _SearchWidgetState extends State<SearchWidget> {
     bloc.expanded.stream.listen((value) {
       if (value) {
         updateOverlay();
-        Overlay.of(context).insert(overlayEntry);
+        try {
+          Overlay.of(context).insert(overlayEntry);
+        } catch (e) {}
       } else {
         try {
           overlayEntry.remove();
@@ -114,7 +118,12 @@ class _SearchWidgetState extends State<SearchWidget> {
             enableFeedback: false,
             icon: Icon(Icons.add),
             color: Colors.grey[700],
-            onPressed: onAdd,
+            onPressed: onAdd != null
+                ? () {
+                    bloc.expand(false);
+                    onAdd();
+                  }
+                : null,
           )
         ],
       );
@@ -146,6 +155,13 @@ class _SearchWidgetState extends State<SearchWidget> {
               child: SugestionsWidget(
                 streamListResults: bloc.listResultsOut,
                 initialData: bloc.listResults,
+                onTap: (latLng) {
+                  HomeModule.to
+                      .get<HomeBloc>()
+                      .mapController
+                      .animateCamera(CameraUpdate.newLatLng(latLng));
+                  bloc.expand(false);
+                },
               ),
             ),
           ),

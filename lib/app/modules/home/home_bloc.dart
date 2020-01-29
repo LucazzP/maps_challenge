@@ -3,6 +3,7 @@ import 'package:desafio_maps/app/modules/home/widgets/place_details_bottom_sheet
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeBloc extends Disposable {
@@ -10,6 +11,7 @@ class HomeBloc extends Disposable {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final BehaviorSubject<int> activePage = BehaviorSubject<int>.seeded(1);
   final PageController pageController = PageController(initialPage: 1);
+  GoogleMapController mapController;
   double lastLat;
   double lastLng;
 

@@ -192,7 +192,7 @@ class PlaceDetailsBottomSheetWidget extends StatelessWidget {
                   itemBuilder: (context, position) {
                     return Padding(
                       padding: EdgeInsets.only(top: 12, bottom: 12),
-                      child: CommentTileWidget(
+                      child: snapshot.data[position] == CommentModel() ? Container() : CommentTileWidget(
                         comment: snapshot.data[position],
                       ),
                     );

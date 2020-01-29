@@ -1,13 +1,16 @@
-import 'package:desafio_maps/app/app_bloc.dart';
-import 'package:desafio_maps/app/app_module.dart';
+import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
+import 'package:desafio_maps/app/modules/home/subpages/favorites/favorites_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
 import 'package:desafio_maps/app/shared/auth/auth_provider.dart';
 import 'package:desafio_maps/app/shared/models/user_model.dart';
+import 'package:desafio_maps/app/shared/widgets/alert_dialog/alert_dialog.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesPage extends StatelessWidget {
+  final FavoritesBloc bloc = HomeModule.to.get<FavoritesBloc>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,11 +29,21 @@ class FavoritesPage extends StatelessWidget {
                       itemCount: snapshot.data.favorites.length,
                       itemBuilder: (context, index) {
                         SpotModel spot = snapshot.data.favorites[index];
-                        return PlaceTileWidget(
-                          placeTile: PlaceTileModel(
-                            title: spot.name,
-                            subtitle: spot.description,
-                            photo: spot.photo,
+                        return InkWell(
+                          onTap: () => AlertDialogCustom.confirm(
+                            context,
+                            text: "Do you want to remove from favorites?",
+                            onConfirm: () => bloc.removeFavorite(
+                              spot.documentReference,
+                              snapshot.data,
+                            ),
+                          ),
+                          child: PlaceTileWidget(
+                            placeTile: PlaceTileModel(
+                              title: spot.name,
+                              subtitle: spot.description,
+                              photo: spot.photo,
+                            ),
                           ),
                         );
                       },

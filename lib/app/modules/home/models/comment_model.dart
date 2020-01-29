@@ -1,4 +1,6 @@
-class CommentModel {
+import 'package:equatable/equatable.dart';
+
+class CommentModel extends Equatable{
   final String comment;
   final int rating;
   final String author;
@@ -20,4 +22,7 @@ class CommentModel {
         "rating": rating,
         "author": author,
       };
+
+  @override
+  List<Object> get props => [comment, rating, author];
 }

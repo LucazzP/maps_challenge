@@ -1,5 +1,5 @@
-import 'package:desafio_maps/app/app_repository.dart';
 import 'package:desafio_maps/app/app_bloc.dart';
+import 'package:desafio_maps/app/app_repository.dart';
 import 'package:desafio_maps/app/app_widget.dart';
 import 'package:desafio_maps/app/modules/home/home_module.dart';
 import 'package:desafio_maps/app/modules/login/login_module.dart';

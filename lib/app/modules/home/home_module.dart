@@ -1,7 +1,8 @@
-import 'package:desafio_maps/app/modules/home/subpages/maps/maps_bloc.dart';
-import 'package:desafio_maps/app/modules/home/home_repository.dart';
 import 'package:desafio_maps/app/modules/home/home_bloc.dart';
 import 'package:desafio_maps/app/modules/home/home_page.dart';
+import 'package:desafio_maps/app/modules/home/home_repository.dart';
+import 'package:desafio_maps/app/modules/home/subpages/favorites/favorites_bloc.dart';
+import 'package:desafio_maps/app/modules/home/subpages/maps/maps_bloc.dart';
 import 'package:desafio_maps/app/modules/home/widgets/search/search_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -16,6 +17,7 @@ class HomeModule extends ChildModule {
           ),
         ),
         Bind((i) => MapsBloc()),
+        Bind((i) => FavoritesBloc()),
         Bind((i) => SearchBloc()),
         Bind((i) => HomeBloc()),
       ];

@@ -1,14 +1,20 @@
+import 'dart:io';
+import 'dart:math' as Math;
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:desafio_maps/app/modules/home/models/comment_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
+import 'package:desafio_maps/app/shared/extensions.dart';
 import 'package:desafio_maps/app/shared/models/response_model.dart';
 import 'package:desafio_maps/app/shared/models/user_model.dart';
 import 'package:desafio_maps/app/shared/repositories/dio_requests.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as Maps;
 import 'package:maps_toolkit/maps_toolkit.dart';
-import 'dart:math' as Math;
 
 class HomeRepository extends Disposable {
   final DioRequests dioRequests;
@@ -24,7 +30,7 @@ class HomeRepository extends Disposable {
   Future<List<SpotModel>> getSpotsSearch(String input) async {
     QuerySnapshot query = await Firestore.instance
         .collection("spots")
-        .where("name", isGreaterThanOrEqualTo: input)
+        .where("name", isGreaterThanOrEqualTo: input.capitalise())
         .limit(4)
         .getDocuments();
     return query.documents.map((doc) => SpotModel.fromDocument(doc)).toList();
@@ -98,17 +104,17 @@ class HomeRepository extends Disposable {
   Future favoritePlace(DocumentReference place, UserModel user) {
     List<DocumentReference> favorites =
         user.favorites.map((fav) => fav.documentReference).toList();
-    if(favorites.contains(place)){
+    if (favorites.contains(place)) {
       favorites.remove(place);
     } else {
       favorites.add(place);
-    }  
+    }
     return user.documentReference.updateData({
       "favorites": favorites,
     });
   }
 
-  Future postNewComment(CommentModel comment, DocumentReference place){
+  Future postNewComment(CommentModel comment, DocumentReference place) {
     return Firestore.instance.runTransaction((transaction) async {
       final snap = await transaction.get(place);
       Map<String, dynamic> freshPlace = snap.data;
@@ -116,49 +122,69 @@ class HomeRepository extends Disposable {
       comments.add(comment.toJson());
       freshPlace['comments'] = comments;
 
-      double newRating = comments.map<int>((c) => c['rating']).reduce((a, b) => a + b) / comments.length;
+      double newRating =
+          comments.map<int>((c) => c['rating']).reduce((a, b) => a + b) /
+              comments.length;
       freshPlace['rating'] = newRating;
 
       transaction.update(place, freshPlace);
     });
   }
 
-  Stream<SpotModel> streamPlace(DocumentReference place){
+  Stream<SpotModel> streamPlace(DocumentReference place) {
     return place.snapshots().map((doc) => SpotModel.fromDocument(doc));
   }
 
-  Future<ResponseModel<Map<String, dynamic>>> getPlaceAutoComplete(String input,
-      {String sessionId, String lat, String lng}) {
-    return dioRequests.get<Map<String, dynamic>>(
-      "$baseUrlGoogle/autocomplete/json?"
-      "input=$input"
-      "&location=$lat,$lng"
-      "&key=$apiKeyGoogle"
-      "&sessiontoken=$sessionId"
-      "&language=pt-BR",
+  Future postNewSpot(SpotModel spot) {
+    return Firestore.instance.collection("spots").add(spot.toJson());
+  }
+
+  Future<String> uploadPhoto(File file, {Sink<double> sinkProgress}) async {
+    final StorageReference storageRef = FirebaseStorage.instance
+        .ref()
+        .child('photos/${DateTime.now().microsecondsSinceEpoch}');
+    final File compressedImage = await FlutterImageCompress.compressAndGetFile(file.absolute.path, file.absolute.path + '_compressed.jpg', quality: 80);
+    final StorageUploadTask uploadTask = storageRef.putFile(
+      compressedImage,
+      StorageMetadata(contentType: 'image'),
+    );
+
+    if (sinkProgress != null) {
+      uploadTask.events.listen((task) {
+        sinkProgress
+            .add(task.snapshot.bytesTransferred / task.snapshot.totalByteCount);
+      });
+    }
+
+    final ref = (await uploadTask.onComplete).ref;
+    final String url = await ref.getDownloadURL();
+
+    return url;
+  }
+
+  Future<List<String>> get getCategories async {
+    return List.castFrom<dynamic, String>(
+      (await Firestore.instance
+              .collection("suggestions")
+              .document("categories")
+              .get())
+          .data['categories'],
     );
   }
 
-  Future<ResponseModel<Map<String, dynamic>>> getPlacesNearby(
-          String lat, String lng,
-          {String pageToken}) =>
-      dioRequests.get<Map<String, dynamic>>(
-        "$baseUrlGoogle/nearbysearch/json?"
-        "location=$lat,$lng"
-        "&type=tourist_attraction"
-        "&key=$apiKeyGoogle"
-        "&radius=5000"
-        "&language=pt-BR"
-        "${pageToken == null ? "" : "&pagetoken=$pageToken"}",
-      );
-
-  Future<ResponseModel> getPhoto(String photoReference, {int maxWidth = 400}) =>
-      dioRequests.get(
-        "$baseUrlGoogle/photo?"
-        "maxwidth=${maxWidth.toString()}"
-        "&photoreference=$photoReference"
-        "&key=$apiKeyGoogle",
-      );
+  Future postNewCategory(String category) {
+    DocumentReference categories =
+        Firestore.instance.collection("suggestions").document("categories");
+    return Firestore.instance.runTransaction((transaction) async {
+      final List<String> freshCategories =
+          List.castFrom<dynamic, String>((await transaction.get(categories)).data['categories']);
+      List<String> newList = List.from(freshCategories);
+      if (!freshCategories.contains(category)) {
+        newList.add(category);
+      }
+      categories.updateData({"categories": newList});
+    });
+  }
 
   Future<ResponseModel<Map<String, dynamic>>> getPlaceDetails(String placeId,
           {String sessionId}) =>

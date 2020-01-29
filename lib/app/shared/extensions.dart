@@ -32,3 +32,13 @@ extension HexColor on Color {
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
+
+extension StringCapitalise on String{
+  String capitalise() {
+    String text;  
+    text = this.split(" ").map<String>((t) {
+      return t[0].toUpperCase() + t.substring(1);
+    }).reduce((a, b) => a + " " + b);
+    return text;
+  }
+}

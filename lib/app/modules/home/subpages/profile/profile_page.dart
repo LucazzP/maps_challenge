@@ -1,5 +1,3 @@
-import 'package:desafio_maps/app/app_bloc.dart';
-import 'package:desafio_maps/app/app_module.dart';
 import 'package:desafio_maps/app/modules/home/models/place_tile_model.dart';
 import 'package:desafio_maps/app/modules/home/models/spot_model.dart';
 import 'package:desafio_maps/app/modules/home/widgets/place_tile/place_tile_widget.dart';
